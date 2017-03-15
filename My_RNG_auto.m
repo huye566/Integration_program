@@ -85,6 +85,8 @@ label_open=0;
 serial_obj='nocom';
 
 %%----initial SA
+global label_sa
+label_sa=0;
 global SA_obj
 % %%----方式1
 %%find SA COM
@@ -149,6 +151,7 @@ else
     SA_obj.InputBufferSize=1000000;
     SA_obj.OutputBufferSize=1000000;
     SA_obj.Timeout=2; 
+    label_sa=1;
 end
 
 %---osc_connect
@@ -244,6 +247,7 @@ label_stop=0;
 global label_generate_bin
 global SA_obj%---------------------------------------------------------
 global base_noise
+global label_sa
 time_base=str2double(get(handles.osc_set_timebase_edit,'String'))*1e-6;
 fs=str2double(get(handles.osc_set_fs_edit,'String'))*1e9;
 table_info{2,3}=[num2str(fs/1e9),'Gss'];%information of ds  
@@ -414,6 +418,7 @@ if label_connect==1&&label_osc_connect==1
             set(handles.ds_start_edit,'String',num2str(loop_ds));
             t0=clock;
             %%----------------SA data save-----------------------------
+            if label_sa==1
             try
                 fopen(SA_obj);                  
                 %%---考虑多组区间                                                    
@@ -425,7 +430,8 @@ if label_connect==1&&label_osc_connect==1
             catch
                 fclose(SA_obj);
                 disp('SA cant be connected!!');
-            end              
+            end   
+            end
             %----------------------------------------------------------
             if label_stop==1
                 label_stop=0;
@@ -617,6 +623,7 @@ if label_connect==1&&label_osc_connect==1
             end
             if i==floor(loop_length/2)
                 %%----------------SA data save-----------------------------
+                if label_sa==1
                 try
                     fopen(SA_obj);                  
                     %%---考虑多组区间                   
@@ -636,7 +643,8 @@ if label_connect==1&&label_osc_connect==1
                 catch
                     fclose(SA_obj);
                     disp('SA cant be connected!!');
-                end              
+                end  
+                end
                 %----------------------------------------------------------
             end
             
@@ -654,6 +662,7 @@ if label_connect==1&&label_osc_connect==1
                  xlswrite(filespec_excel,{roundn(temp_average_sym,-5),roundn(temp_average_acf,-5)},'sheet1',excel_range);  
             end
             %%----------------SA data save-----------------------------
+            if label_sa==1
             try
                 fopen(SA_obj);                  
                 %%---考虑多组区间                   
@@ -673,7 +682,8 @@ if label_connect==1&&label_osc_connect==1
             catch
                 fclose(SA_obj);
                 disp('SA cant be connected!!');
-            end              
+            end   
+            end
             %----------------------------------------------------------
             time=etime(clock,t0);
             set_run_time(hObject, eventdata, handles,time,'b1');
@@ -845,6 +855,7 @@ if strncmp(end_folder,'bin_data',8)~=1
     return;
 end
 label_average=get(handles.control_average_checkbox,'Value');
+add_analyse(origin_add);
 [ico_num,dir_address_ds,diehard_dir_address_ico,result_dir_address_ico,...
     diehard_dir_address_ds,result_dir_address_ds,diehard_excel,result_excel,...
     diehard_excel_add,result_excel_add]=get_file_system(origin_add);
