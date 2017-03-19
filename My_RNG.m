@@ -3152,6 +3152,26 @@ for loop_save=1:100
     Relatioship_feedback_data_sa_osa(deviceObj,SA_obj,OSA_obj,path_head,filespec_excel_OSC,1,label_osc_channel,1,loop_save)%no TDC,Precision_choose:1-16,1-8
 end
 
+function app4(hObject, eventdata, handles)
+global deviceObj
+global label_osc_channel
+global serial_obj
+[~,~,tdc_information]=tdc_command(serial_obj,'ds');
+position_1=strfind(tdc_information{2},':')+2;
+position_2=strfind(tdc_information{2},'ps')-2;
+ds_value_str=tdc_information{2}(position_1:position_2);
+ds_temp=floor(str2double(ds_value_str))+2100;
+% ds_temp=get_the_str(ds_temp);
+ds_temp=get_ordered_str(hObject, eventdata, handles,ds_temp);
+position_1=strfind(tdc_information{3},':')+2;
+position_2=strfind(tdc_information{3},'GHz')-2;
+ico_value_str=tdc_information{3}(position_1:position_2);  
+ico_temp=floor(str2double(ico_value_str))+99;
+% ico_temp=get_the_str(ico_temp);
+ico_temp=get_ordered_str(hObject, eventdata, handles,ico_temp);
+time=datestr(now,29);
+path_head_origin=fullfile(fullfile('E:\EXP4(tdc,extrcation)',['Experiment4_',time]),['DS_',ds_temp,'_ICO_',ico_temp]);
+Extract_file_get(deviceObj,path_head_origin,label_osc_channel);
 
 
 % --- Executes on button press in SA_initial_button.
