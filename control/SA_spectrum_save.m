@@ -29,7 +29,7 @@ real_data_x=(0:1:1000)*(Stop_frequency-Start_frequency)/1000+Start_frequency;
 real_data_y=Reference_level-10*DB_div_value*(14592-fre_data)/(14592-1792);
 %%----save file
 if type~=2
-dlmwrite(fullfile(path_head_SA,[SA_file_name,'.csv']),[real_data_x;real_data_y]);
+dlmwrite(fullfile(path_head_SA,[SA_file_name,'.csv']),[real_data_x;real_data_y],'precision',9);
 end
 %%----save fig
 if type~=1

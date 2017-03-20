@@ -20,7 +20,7 @@ OSA_title_name=[OSA_title_name,'\_',num2str(bandwidth_3dB)];
 %%---save data
 %%--------save file
 if type~=2
-   dlmwrite(fullfile(path_head_OSA,[OSA_file_name,'.csv']),wave_data);
+   dlmwrite(fullfile(path_head_OSA,[OSA_file_name,'.csv']),wave_data,'precision',9);
 end
 %%--------save fig
 if type~=1
